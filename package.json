@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ines/termynal.git"
+    "url": "git+https://github.com/sambacha/termynal.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ines/termynal/issues"
+    "url": "https://github.com/sambacha/termynal/issues"
   },
-  "homepage": "https://github.com/ines/termynal#readme",
+  "homepage": "https://github.com/sambacha/termynal#readme",
   "devDependencies": {
     "css-loader": "^5.1.0",
     "css-minimizer-webpack-plugin": "^1.2.0",
