@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
   entry: './src/termynal.js',
   output: {
-    filename: '[name].[contenthash].js',
+    filename: 'termynal.[contenthash].js',
     // filename: 'termynal.js',
     path: path.resolve(__dirname, 'dist'),
     library: 'Termynal',
