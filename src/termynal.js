@@ -26,35 +26,45 @@ export default class Termynal {
    * @param {boolean} options.noInit - Don't initialize the animation.
    */
   constructor(container = '#termynal', options = {}) {
-    this.container = (typeof container === 'string') ? document.querySelector(container) : container;
+    this.container =
+      typeof container === 'string'
+        ? document.querySelector(container)
+        : container;
 
     this.pfx = `data-${options.prefix || 'ty'}`;
 
-    this.startDelay = options.startDelay
-      || parseFloat(this.container.getAttribute(`${this.pfx}-startDelay`))
-      || 600;
-    this.typeDelay = options.typeDelay
-      || parseFloat(this.container.getAttribute(`${this.pfx}-typeDelay`))
-      || 90;
-    this.lineDelay = options.lineDelay
-      || parseFloat(this.container.getAttribute(`${this.pfx}-lineDelay`))
-      || 1500;
-    this.progressLength = options.progressLength
-      || parseFloat(this.container.getAttribute(`${this.pfx}-progressLength`))
-      || 40;
-    this.progressChar = options.progressChar
-      || this.container.getAttribute(`${this.pfx}-progressChar`)
-      || '█';
-    this.progressPercent = options.progressPercent
-      || parseFloat(this.container.getAttribute(`${this.pfx}-progressPercent`))
-      || 100;
-    this.cursor = options.cursor
-      || this.container.getAttribute(`${this.pfx}-cursor`)
-      || '▋';
+    this.startDelay =
+      options.startDelay ||
+      parseFloat(this.container.getAttribute(`${this.pfx}-startDelay`)) ||
+      600;
+    this.typeDelay =
+      options.typeDelay ||
+      parseFloat(this.container.getAttribute(`${this.pfx}-typeDelay`)) ||
+      90;
+    this.lineDelay =
+      options.lineDelay ||
+      parseFloat(this.container.getAttribute(`${this.pfx}-lineDelay`)) ||
+      1500;
+    this.progressLength =
+      options.progressLength ||
+      parseFloat(this.container.getAttribute(`${this.pfx}-progressLength`)) ||
+      40;
+    this.progressChar =
+      options.progressChar ||
+      this.container.getAttribute(`${this.pfx}-progressChar`) ||
+      '█';
+    this.progressPercent =
+      options.progressPercent ||
+      parseFloat(this.container.getAttribute(`${this.pfx}-progressPercent`)) ||
+      100;
+    this.cursor =
+      options.cursor ||
+      this.container.getAttribute(`${this.pfx}-cursor`) ||
+      '▋';
 
     this.lineData = this.lineDataToElements(options.lineData || []);
 
-    if (!options.noInit) this.init()
+    if (!options.noInit) this.init();
   }
 
   /**
@@ -62,20 +72,19 @@ export default class Termynal {
    */
   init() {
     // Appends dynamically loaded lines to existing line elements.
-    this.lines = [...this.container.querySelectorAll(`[${this.pfx}]`)]
-      .concat(this.lineData);
+    this.lines = [...this.container.querySelectorAll(`[${this.pfx}]`)].concat(
+      this.lineData
+    );
 
     /**
      * Calculates width and height of Termynal container.
      * If container is empty and lines are dynamically loaded, defaults to browser `auto` or CSS.
      */
     const containerStyle = getComputedStyle(this.container);
-    this.container.style.width = containerStyle.width !== '0px'
-      ? containerStyle.width
-      : undefined;
-    this.container.style.minHeight = containerStyle.height !== '0px'
-      ? containerStyle.height
-      : undefined;
+    this.container.style.width =
+      containerStyle.width !== '0px' ? containerStyle.width : undefined;
+    this.container.style.minHeight =
+      containerStyle.height !== '0px' ? containerStyle.height : undefined;
 
     this.container.setAttribute('data-termynal', '');
     this.container.innerHTML = '';
@@ -97,14 +106,10 @@ export default class Termynal {
         line.setAttribute(`${this.pfx}-cursor`, this.cursor);
         await this.type(line);
         await this._wait(delay);
-      }
-
-      else if (type == 'progress') {
+      } else if (type == 'progress') {
         await this.progress(line);
         await this._wait(delay);
-      }
-
-      else {
+      } else {
         this.container.appendChild(line);
         await this._wait(delay);
       }
@@ -136,14 +141,14 @@ export default class Termynal {
    * @param {Node} line - The line element to render.
    */
   async progress(line) {
-    const containerWidth = this.container.clientWidth
-    const progressLength = line.getAttribute(`${this.pfx}-progressLength`)
-      || this.progressLength;
-    const progressChar = line.getAttribute(`${this.pfx}-progressChar`)
-      || this.progressChar;
+    const containerWidth = this.container.clientWidth;
+    const progressLength =
+      line.getAttribute(`${this.pfx}-progressLength`) || this.progressLength;
+    const progressChar =
+      line.getAttribute(`${this.pfx}-progressChar`) || this.progressChar;
     const chars = progressChar.repeat(progressLength);
-    const progressPercent = line.getAttribute(`${this.pfx}-progressPercent`)
-      || this.progressPercent;
+    const progressPercent =
+      line.getAttribute(`${this.pfx}-progressPercent`) || this.progressPercent;
 
     line.textContent = '';
 
@@ -151,7 +156,7 @@ export default class Termynal {
 
     for (let i = 1; i < chars.length + 1; i++) {
       await this._wait(this.typeDelay);
-      const percent = Math.round(i / chars.length * 100);
+      const percent = Math.round((i / chars.length) * 100);
 
       line.textContent = `${chars.slice(0, i)} ${percent}%`;
 
@@ -166,7 +171,7 @@ export default class Termynal {
    * @param {number} time - Timeout, in ms.
    */
   _wait(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
+    return new Promise((resolve) => setTimeout(resolve, time));
   }
 
   /**
@@ -177,9 +182,11 @@ export default class Termynal {
    * @returns {Element[]} - Array of line elements.
    */
   lineDataToElements(lineData) {
-    return lineData.map(line => {
+    return lineData.map((line) => {
       let div = document.createElement('div');
-      div.innerHTML = `<span ${this._attributes(line)}>${line.value || ''}</span>`;
+      div.innerHTML = `<span ${this._attributes(line)}>${
+        line.value || ''
+      }</span>`;
 
       return div.firstElementChild;
     });
@@ -197,11 +204,11 @@ export default class Termynal {
       attrs += this.pfx;
 
       if (prop === 'type') {
-        attrs += `="${line[prop]}" `
+        attrs += `="${line[prop]}" `;
       } else if (prop !== 'value') {
-        attrs += `-${prop}="${line[prop]}" `
+        attrs += `-${prop}="${line[prop]}" `;
       }
-  }
+    }
 
     return attrs;
   }
